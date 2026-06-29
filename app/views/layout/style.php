@@ -670,6 +670,89 @@ a.button.secondary:hover {
     background: #fff;
 }
 
+.receipt-page {
+    background: #f4f4f4;
+    color: #111;
+}
+
+.receipt-shell {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+}
+
+.receipt-card {
+    width: min(100%, 460px);
+    background: #fff;
+    border: 1px solid #111;
+    padding: 22px;
+}
+
+.receipt-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.receipt-header h1 {
+    margin: 4px 0 0;
+    font-size: 28px;
+}
+
+.receipt-number {
+    margin: 18px 0;
+    padding: 12px;
+    border: 1px solid #111;
+    font-size: 24px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.receipt-list {
+    display: grid;
+    gap: 10px;
+}
+
+.receipt-list p {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.receipt-list span {
+    text-align: right;
+}
+
+.receipt-print {
+    width: 100%;
+    margin-top: 18px;
+}
+
+@media print {
+    .receipt-page {
+        background: #fff;
+    }
+
+    .receipt-shell {
+        min-height: auto;
+        padding: 0;
+    }
+
+    .receipt-card {
+        width: 100%;
+        border: 0;
+    }
+
+    .receipt-print {
+        display: none;
+    }
+}
+
 .transport-preview-card img {
     object-fit: cover;
 }

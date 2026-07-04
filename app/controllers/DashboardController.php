@@ -1,9 +1,6 @@
 <?php
-session_start();
-if (!isset($_SESSION["user"])) {
-    header("Location: ../views/login.php");
-    exit();
-}
+require_once __DIR__ . "/../helpers/auth.php";
+requireLogin('../views/login.php');
 
 require_once __DIR__ . "/../../config/database.php";
 require_once __DIR__ . "/../models/Dashboard.php";

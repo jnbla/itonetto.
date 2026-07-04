@@ -1,8 +1,6 @@
 <?php
-session_start();
-
-require_once __DIR__ . "/../../config/database.php";
 require_once __DIR__ . "/../helpers/auth.php";
+require_once __DIR__ . "/../../config/database.php";
 require_once __DIR__ . "/../helpers/settings.php";
 require_once __DIR__ . "/../helpers/WhatsAppNotifier.php";
 require_once __DIR__ . "/../models/Booking.php";
@@ -33,6 +31,33 @@ class BookingController {
     public function create() {
         $courts = $this->courtModel->getActive();
         require __DIR__ . "/../views/booking/create.php";
+    }
+
+    public function user() {
+        global $conn;
+        $bookings = $this->bookingModel->getByUser(currentUserId());
+        $courts = $this->courtModel->getActive();
+        $rows = [];
+        $waiting = 0;
+        $approved = 0;
+        $done = 0;
+        $cancelled = 0;
+
+        while ($row = $bookings->fetch_assoc()) {
+            $rows[] = $row;
+            if (($row['status'] ?? '') === 'Menunggu') {
+                $waiting++;
+            } elseif (($row['status'] ?? '') === 'Disetujui') {
+                $approved++;
+            } elseif (($row['status'] ?? '') === 'Selesai') {
+                $done++;
+            } elseif (($row['status'] ?? '') === 'Dibatalkan') {
+                $cancelled++;
+            }
+        }
+
+        $appName = appName($conn);
+        require __DIR__ . "/../views/booking/user.php";
     }
 
     public function store() {
@@ -156,6 +181,9 @@ $action = $_GET['action'] ?? 'index';
 switch ($action) {
     case 'create':
         $controller->create();
+        break;
+    case 'user':
+        $controller->user();
         break;
     case 'store':
         $controller->store();

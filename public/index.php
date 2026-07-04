@@ -1,10 +1,12 @@
 <?php
-session_start();
+require_once __DIR__ . "/../app/helpers/auth.php";
 
-if (!isset($_SESSION["user"])) {
-    header("Location: /IkiNet/app/views/login.php");
-    exit();
-} else {
-    header("Location: /IkiNet/app/controllers/DashboardController.php");
+requireLogin('/IkiNet/app/views/login.php');
+
+if (isAdmin()) {
+    header("Location: /IkiNet/app/controllers/TransportController.php");
     exit();
 }
+
+header("Location: /IkiNet/app/controllers/BookingController.php?action=user");
+exit();

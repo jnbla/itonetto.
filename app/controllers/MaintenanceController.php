@@ -1,8 +1,9 @@
 <?php
-session_start();
+require_once __DIR__ . "/../helpers/auth.php";
+requireLogin('../views/login.php');
 
-if (!isset($_SESSION["user"])) {
-    header("Location: ../views/login.php");
+if (isAdmin()) {
+    header("Location: /IkiNet/app/controllers/TransportController.php");
     exit();
 }
 

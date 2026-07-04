@@ -1,8 +1,4 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 global $conn;
 if (!isset($conn) || !($conn instanceof mysqli)) {
     require __DIR__ . "/../../../config/database.php";
@@ -64,14 +60,17 @@ $isAdmin = isAdmin();
     <div class="nav-title"><?= htmlspecialchars($appName) ?></div>
 
     <div class="nav-menu">
-        <a href="/IkiNet/app/controllers/DashboardController.php">Dashboard</a>
-        <a href="/IkiNet/app/controllers/TransportController.php">Lapangan</a>
-        <a href="/IkiNet/app/controllers/BookingController.php">Reservasi</a>
         <?php if ($isAdmin): ?>
+            <a href="/IkiNet/app/controllers/TransportController.php">Dashboard Admin</a>
+            <a href="/IkiNet/app/controllers/TransportController.php">Lapangan</a>
+            <a href="/IkiNet/app/controllers/BookingController.php">Reservasi</a>
             <a href="/IkiNet/app/controllers/AnalyticsController.php">Analytics</a>
             <a href="/IkiNet/app/controllers/TransportController.php?action=audit_log">Audit Log</a>
+            <a href="/IkiNet/app/controllers/SettingController.php">Settings</a>
+        <?php else: ?>
+            <a href="/IkiNet/app/controllers/BookingController.php?action=user">Booking Saya</a>
+            <a href="/IkiNet/app/controllers/BookingController.php?action=create">Booking Baru</a>
         <?php endif; ?>
-        <a href="/IkiNet/app/controllers/SettingController.php">Settings</a>
         <a href="/IkiNet/app/views/logout.php">Logout</a>
     </div>
 </div>

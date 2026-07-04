@@ -1,6 +1,17 @@
 <?php
 include "../../config/database.php";
+require_once __DIR__ . "/../helpers/auth.php";
 require_once __DIR__ . "/../helpers/settings.php";
+
+ensureSessionStarted();
+if (isset($_SESSION['user'])) {
+    if (isAdmin()) {
+        header('Location: /IkiNet/app/controllers/TransportController.php');
+        exit();
+    }
+    header('Location: /IkiNet/app/controllers/BookingController.php?action=user');
+    exit();
+}
 
 $message = "";
 $messageType = "error";
@@ -57,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h1>Register</h1>
 
             <?php if ($message): ?>
-                <div class="auth-message <?= $messageType ?>">
+                <div class="auth-message <?= htmlspecialchars($messageType) ?>">
                     <?= htmlspecialchars($message) ?>
                 </div>
             <?php endif; ?>

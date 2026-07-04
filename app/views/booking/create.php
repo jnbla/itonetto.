@@ -18,17 +18,18 @@ while ($row = $courts->fetch_assoc()) {
         <div>
             <p class="dashboard-kicker">Reservasi</p>
             <h1>Buat Booking</h1>
-            <p>Pilih lapangan dan jadwal bermain. Sistem akan menolak jadwal yang bentrok.</p>
+            <p>Pilih lapangan tersedia dan atur jadwalmu dengan cepat. Booking yang bentrok akan otomatis dicegah.</p>
         </div>
 
         <a href="/IkiNet/app/controllers/BookingController.php" class="button secondary">Kembali</a>
     </section>
 
-    <section class="transport-form-card">
-        <form method="POST" action="/IkiNet/app/controllers/BookingController.php?action=store" class="transport-form">
-            <label>
-                <span>Lapangan</span>
-                <select name="court_id" required>
+    <section class="transport-form-layout">
+        <div class="transport-form-card">
+            <form method="POST" action="/IkiNet/app/controllers/BookingController.php?action=store" class="transport-form">
+                <label>
+                    <span>Lapangan</span>
+                    <select name="court_id" required>
                     <option value="">Pilih lapangan</option>
                     <?php foreach ($courtRows as $court): ?>
                         <option value="<?= (int) $court['id'] ?>">
@@ -70,22 +71,25 @@ while ($row = $courts->fetch_assoc()) {
                 <a href="/IkiNet/app/controllers/BookingController.php">Batal</a>
             </div>
         </form>
-    </section>
+        </div>
 
-    <section class="dashboard-grid two-columns">
-        <?php foreach ($courtRows as $court): ?>
-            <article class="dashboard-card">
-                <div class="section-title">
-                    <h2><?= htmlspecialchars($court['nama_lapangan']) ?></h2>
-                    <span><?= htmlspecialchars($court['tipe']) ?></span>
-                </div>
-                <?php if (!empty($court['gambar'])): ?>
-                    <img class="booking-court-image" src="/IkiNet/uploads/<?= htmlspecialchars($court['gambar']) ?>" alt="<?= htmlspecialchars($court['nama_lapangan']) ?>">
-                <?php endif; ?>
-                <p><?= htmlspecialchars($court['deskripsi'] ?: 'Lapangan tersedia untuk reservasi.') ?></p>
-                <p><strong>Harga</strong> Rp <?= number_format((float) $court['harga_per_jam'], 0, ',', '.') ?>/jam</p>
-                <p><strong>Lokasi</strong> <?= htmlspecialchars($court['lokasi']) ?></p>
-            </article>
-        <?php endforeach; ?>
+        <aside class="transport-preview-card">
+            <div class="section-title">
+                <h2>Lapangan Aktif</h2>
+                <span>Pilih lapangan terbaik untuk jadwalmu</span>
+            </div>
+            <?php foreach ($courtRows as $court): ?>
+                <article class="booking-court-card compact">
+                    <?php if (!empty($court['gambar'])): ?>
+                        <img class="booking-court-image" src="/IkiNet/uploads/<?= htmlspecialchars($court['gambar']) ?>" alt="<?= htmlspecialchars($court['nama_lapangan']) ?>">
+                    <?php endif; ?>
+                    <div class="booking-court-content">
+                        <h3><?= htmlspecialchars($court['nama_lapangan']) ?></h3>
+                        <p><?= htmlspecialchars($court['lokasi']) ?></p>
+                        <div class="booking-court-meta"><strong>Rp <?= number_format((float) $court['harga_per_jam'], 0, ',', '.') ?>/jam</strong></div>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </aside>
     </section>
 </div>

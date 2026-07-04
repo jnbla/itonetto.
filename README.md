@@ -15,6 +15,14 @@ Aplikasi booking/reservasi penggunaan lapangan bulutangkis berbasis PHP MVC sede
 - Laporan lapangan dan export CSV.
 - Prepared statements digunakan pada query input pengguna.
 
+## Bukti Kriteria Dosen
+
+1. MVC: `app/controllers`, `app/models`, dan `app/views` sudah dipisah sebagai controller, model, dan view.
+2. CRUD: Modul `Transport`/`courts` mendukung create, read, update, delete penuh.
+3. Autentikasi & Otorisasi: register/login, `password_hash`, `password_verify`, dan role `admin` vs `user` ada di `app/views/login.php`, `app/views/register.php`, serta helper `app/helpers/auth.php`.
+4. Keamanan: input pengguna menggunakan prepared statements di model `app/models/*`; password telah di-hash.
+5. Upload file: fitur upload gambar lapangan tersedia di `TransportController::store()` / `TransportController::update()` dan helper `app/helpers/ImageOptimizer.php`.
+
 ## Struktur Folder
 
 - `app/controllers` berisi controller aplikasi.

@@ -1,8 +1,6 @@
 <?php
-session_start();
-
-require_once __DIR__ . "/../../config/database.php";
 require_once __DIR__ . "/../helpers/auth.php";
+require_once __DIR__ . "/../../config/database.php";
 require_once __DIR__ . "/../helpers/settings.php";
 require_once __DIR__ . "/../helpers/ImageOptimizer.php";
 require_once __DIR__ . "/../helpers/ExcelHandler.php";
@@ -27,10 +25,17 @@ class TransportController {
 
     public function index() {
         global $conn;
-        $data = $this->model->getAll();
-        $canManage = isAdmin();
         $appName = appName($conn);
-        require __DIR__ . "/../views/transport/index.php";
+
+        if (isAdmin()) {
+            $data = $this->model->getAll();
+            $canManage = true;
+            require __DIR__ . "/../views/transport/index.php";
+            return;
+        }
+
+        $courts = $this->model->getActive();
+        require __DIR__ . "/../views/transport/user.php";
     }
 
     public function report() {

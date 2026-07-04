@@ -259,6 +259,11 @@ a.button.secondary:hover {
 
 .section-title h2 {
     margin: 0;
+}
+
+.section-title p,
+.section-title span {
+    margin: 0;
     padding: 0;
     border: 0;
     font-size: 22px;
@@ -489,13 +494,185 @@ a.button.secondary:hover {
 
 .transport-hero p {
     margin: 10px 0 0;
+    max-width: 560px;
+    color: #555;
 }
 
-.transport-toolbar {
-    display: grid;
-    grid-template-columns: 2fr repeat(4, 1fr) 120px 120px 90px;
+.transport-table-card {
+    margin-top: 20px;
+}
+
+.booking-table-caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.booking-table-caption h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.booking-table-caption small {
+    display: block;
+    color: #555;
+    margin-top: 4px;
+}
+
+.booking-actions {
+    display: flex;
     gap: 10px;
-    margin-top: 22px;
+    flex-wrap: wrap;
+}
+
+.transport-form-layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) minmax(320px, 440px);
+    gap: 24px;
+    margin-top: 20px;
+}
+
+.transport-form-card,
+.transport-preview-card {
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    padding: 28px;
+    box-shadow: 0 16px 38px rgba(0,0,0,0.05);
+}
+
+.transport-form {
+    display: grid;
+    gap: 18px;
+}
+
+.transport-form label {
+    display: grid;
+    gap: 8px;
+}
+
+.transport-form label span {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.transport-form input,
+.transport-form select {
+    height: 48px;
+    margin: 0;
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
+    background: #fafafa;
+    padding: 0 14px;
+}
+
+.transport-form select {
+    background: #fff;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.form-actions button,
+.form-actions a {
+    min-width: 140px;
+}
+
+.transport-preview-card {
+    display: grid;
+    gap: 18px;
+}
+
+.booking-court-card {
+    display: grid;
+    gap: 14px;
+    border: 1px solid #f0f0f0;
+    padding: 18px;
+    border-radius: 18px;
+    background: #fdfdfd;
+}
+
+.booking-court-card.compact {
+    grid-template-columns: 100px 1fr;
+    align-items: center;
+}
+
+.booking-court-card.compact img {
+    width: 100px;
+    height: 80px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 1px solid #eee;
+}
+
+.booking-court-card h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.booking-court-card p {
+    margin: 0;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.booking-court-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    color: #333;
+    font-size: 14px;
+}
+
+.booking-court-meta strong {
+    color: #111;
+}
+
+.booking-court-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 18px;
+    border: 1px solid #eee;
+}
+
+.dashboard-grid.three-columns.booking-court-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.transport-table-card table th,
+.transport-table-card table td {
+    padding: 14px 12px;
+}
+
+.transport-table-card table tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.transport-table-card table tbody tr:last-child {
+    border-bottom: 0;
+}
+
+.button.secondary {
+    border-color: #111;
+    background: transparent;
+    color: #111;
+}
+
+.button.secondary:hover {
+    background: #111;
+    color: #fff;
 }
 
 .transport-toolbar input,

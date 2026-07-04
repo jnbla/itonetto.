@@ -1,7 +1,17 @@
 <?php
-session_start();
 include "../../config/database.php";
+require_once __DIR__ . "/../helpers/auth.php";
 require_once __DIR__ . "/../helpers/settings.php";
+
+ensureSessionStarted();
+if (isset($_SESSION['user'])) {
+    if (isAdmin()) {
+        header('Location: /IkiNet/app/controllers/TransportController.php');
+        exit();
+    }
+    header('Location: /IkiNet/app/controllers/BookingController.php?action=user');
+    exit();
+}
 
 $message = "";
 $messageType = "error";
@@ -10,6 +20,7 @@ $appName = appName($conn);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST["username"] ?? '');
     $password = $_POST["password"] ?? '';
+    $destination = $_POST["destination"] ?? 'booking';
 
     $query = $conn->prepare("SELECT id, username, password, role FROM users WHERE username = ? LIMIT 1");
     $query->bind_param("s", $username);
@@ -25,11 +36,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["user"] = $user["username"];
             $_SESSION["role"] = $user["role"] ?? "user";
 
-            header("Location: ../controllers/DashboardController.php");
-            exit();
+            if ($destination === 'admin') {
+                if (in_array(strtolower($_SESSION["role"] ?? 'user'), ['admin', 'administrator'], true)) {
+                    header("Location: ../controllers/TransportController.php");
+                    exit();
+                }
+                $message = "Hanya admin yang dapat mengakses halaman admin.";
+            } else {
+                header("Location: ../controllers/BookingController.php?action=user");
+                exit();
+            }
+        } else {
+            $message = "Password salah.";
         }
-
-        $message = "Password salah.";
     } else {
         $message = "User tidak ditemukan.";
     }
@@ -50,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h1>Login</h1>
 
             <?php if ($message): ?>
-                <div class="auth-message <?= $messageType ?>">
+                <div class="auth-message <?= htmlspecialchars($messageType) ?>">
                     <?= htmlspecialchars($message) ?>
                 </div>
             <?php endif; ?>
@@ -61,6 +80,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <label for="password">Password</label>
                 <input type="password" name="password" id="password" required>
+
+                <label for="destination">Masuk Sebagai</label>
+                <select name="destination" id="destination">
+                    <option value="booking">Booking Lapangan</option>
+                    <option value="admin">Admin</option>
+                </select>
 
                 <button type="submit">Login</button>
             </form>

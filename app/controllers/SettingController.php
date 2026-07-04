@@ -1,10 +1,5 @@
 <?php
-session_start();
-if (!isset($_SESSION["user"])) {
-    header("Location: ../views/login.php");
-    exit();
-}
-
+require_once __DIR__ . "/../helpers/auth.php";
 require_once __DIR__ . "/../../config/database.php";
 require_once __DIR__ . "/../models/Setting.php";
 
@@ -12,6 +7,7 @@ class SettingController {
     private $model;
 
     public function __construct($db) {
+        requireLogin();
         $this->model = new Setting($db);
     }
 

@@ -4,12 +4,6 @@ function h($value) {
 }
 
 if (!isset($dashboardData)) {
-    session_start();
-    if (!isset($_SESSION["user"])) {
-        header("Location: login.php");
-        exit();
-    }
-
     require_once __DIR__ . "/../../config/database.php";
     require_once __DIR__ . "/../models/Dashboard.php";
     require_once __DIR__ . "/../helpers/settings.php";
@@ -98,6 +92,7 @@ $appName = appName($conn);
 
         <div class="quick-actions">
             <a class="button" href="../controllers/BookingController.php?action=create">Buat Booking</a>
+            <a class="button secondary" href="../controllers/BookingController.php?action=user">Booking Saya</a>
             <a class="button secondary" href="../controllers/TransportController.php">Kelola Lapangan</a>
         </div>
     </section>

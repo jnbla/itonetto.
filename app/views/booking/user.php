@@ -9,16 +9,22 @@
         <?php unset($_SESSION['flash']); ?>
     <?php endif; ?>
 
-    <section class="transport-hero">
-        <div>
+    <section class="booking-hero booking-hero-user">
+        <div class="booking-hero-copy">
             <p class="dashboard-kicker"><?= htmlspecialchars($appName ?? 'Badminton Court Booking') ?></p>
             <h1>Booking Saya</h1>
-            <p>Ringkasan reservasi dan pelacakan status booking kamu.</p>
+            <p>Ringkasan reservasi, status terbaru, dan akses cepat ke booking berikutnya.</p>
+            <div class="booking-hero-highlights">
+                <span class="booking-chip">📅 Riwayat teratur</span>
+                <span class="booking-chip">📱 QR siap pakai</span>
+                <span class="booking-chip">📝 Status real-time</span>
+            </div>
         </div>
 
-        <div class="quick-actions">
-            <a href="/IkiNet/app/controllers/BookingController.php?action=create" class="button">Buat Booking Baru</a>
-            <a href="/IkiNet/app/controllers/BookingController.php" class="button secondary">Kelola Booking</a>
+        <div class="booking-hero-card booking-hero-card-accent">
+            <h3>Langkah berikutnya</h3>
+            <p>Pesan lapangan favoritmu, pantau status, dan lihat detail reservasi kapan saja.</p>
+            <a href="/IkiNet/app/controllers/BookingController.php?action=create" class="button">Pesan Sekarang</a>
         </div>
     </section>
 

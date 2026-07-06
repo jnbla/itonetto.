@@ -28,24 +28,51 @@ $appName = appName($conn);
         <?php unset($_SESSION['flash']); ?>
     <?php endif; ?>
 
-    <section class="dashboard-hero">
-        <div>
+    <section class="admin-dashboard-header">
+        <div class="admin-header-copy">
             <p class="dashboard-kicker"><?= date('d F Y') ?></p>
             <h1><?= h($appName) ?></h1>
-            <p>Selamat datang, <?= h($_SESSION["user"]) ?>. Kelola lapangan dan reservasi bulutangkis dari satu tempat.</p>
+            <p>Selamat datang, <?= h($_SESSION["user"]) ?>. Kelola booking, lapangan, dan aktivitas operasional dari satu panel utama.</p>
         </div>
 
-        <div class="profile-card">
-            <div class="profile-avatar"><?= h(strtoupper(substr($_SESSION["user"], 0, 1))) ?></div>
-            <div>
-                <strong><?= h($_SESSION["user"]) ?></strong>
-                <span><?= h($userRole) ?></span>
-            </div>
-            <a href="/IkiNet/app/views/logout.php">Logout</a>
+        <div class="admin-header-actions">
+            <a class="button" href="../controllers/BookingController.php?action=create">Buat Booking</a>
+            <a class="button secondary" href="../controllers/TransportController.php">Kelola Lapangan</a>
         </div>
     </section>
 
-    <section class="summary-grid">
+    <section class="admin-dashboard-layout">
+        <aside class="admin-sidebar">
+            <div class="profile-card">
+                <div class="profile-avatar"><?= h(strtoupper(substr($_SESSION["user"], 0, 1))) ?></div>
+                <div>
+                    <strong><?= h($_SESSION["user"]) ?></strong>
+                    <span><?= h($userRole) ?></span>
+                </div>
+                <a href="/IkiNet/app/views/logout.php">Logout</a>
+            </div>
+
+            <div class="admin-sidebar-card">
+                <strong>Prioritas hari ini</strong>
+                <ul>
+                    <li>Konfirmasi booking menunggu</li>
+                    <li>Cek lapangan maintenance</li>
+                    <li>Pantau aktivitas terbaru</li>
+                </ul>
+            </div>
+
+            <div class="admin-sidebar-card">
+                <strong>Akses cepat</strong>
+                <div class="admin-link-list">
+                    <a href="../controllers/BookingController.php?action=user">Booking Saya</a>
+                    <a href="../controllers/AnalyticsController.php">Analytics</a>
+                    <a href="../controllers/SettingController.php">Settings</a>
+                </div>
+            </div>
+        </aside>
+
+        <div class="admin-main-stack">
+            <section class="summary-grid">
         <article class="metric-card">
             <span>Total Lapangan</span>
             <strong><?= $totalCourts ?></strong>
@@ -69,6 +96,21 @@ $appName = appName($conn);
     </section>
 
     <section class="dashboard-tools">
+        <div class="dashboard-note">
+            <div>
+                <strong>Prioritas hari ini</strong>
+                <span>Konfirmasi booking yang menunggu, cek lapangan maintenance, dan pantau aktivitas terbaru dari satu panel.</span>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <a class="button" href="../controllers/BookingController.php?action=create">Buat Booking</a>
+            <a class="button secondary" href="../controllers/BookingController.php?action=user">Booking Saya</a>
+            <a class="button secondary" href="../controllers/TransportController.php">Kelola Lapangan</a>
+        </div>
+    </section>
+
+    <section class="dashboard-tools">
         <form class="dashboard-filter" id="dashboardFilter">
             <input type="search" id="searchInput" placeholder="Cari nama, ID, tipe, atau lokasi lapangan">
             <select id="typeFilter">
@@ -89,19 +131,13 @@ $appName = appName($conn);
                 <?php endforeach; ?>
             </select>
         </form>
-
-        <div class="quick-actions">
-            <a class="button" href="../controllers/BookingController.php?action=create">Buat Booking</a>
-            <a class="button secondary" href="../controllers/BookingController.php?action=user">Booking Saya</a>
-            <a class="button secondary" href="../controllers/TransportController.php">Kelola Lapangan</a>
-        </div>
     </section>
 
     <section class="dashboard-grid two-columns">
         <article class="dashboard-card">
             <div class="section-title">
-                <h2>Status Booking</h2>
-                <span>Ringkasan</span>
+                <h2>Prioritas Booking</h2>
+                <span>Ringkas</span>
             </div>
             <div class="type-stats">
                 <?php foreach ($bookingStatus as $status => $count): ?>
@@ -116,8 +152,8 @@ $appName = appName($conn);
 
         <article class="dashboard-card">
             <div class="section-title">
-                <h2>Lapangan per Lokasi</h2>
-                <span>Bar</span>
+                <h2>Distribusi Lokasi</h2>
+                <span>Lokasi</span>
             </div>
             <div class="bar-list">
                 <?php foreach (array_slice($byLocation, 0, 6, true) as $location => $count): ?>
@@ -134,7 +170,7 @@ $appName = appName($conn);
     <section class="dashboard-grid two-columns">
         <article class="dashboard-card">
             <div class="section-title">
-                <h2>Tren Booking</h2>
+                <h2>Pola Booking</h2>
                 <span>Bulanan</span>
             </div>
             <div class="line-chart">
@@ -157,7 +193,7 @@ $appName = appName($conn);
 
         <article class="dashboard-card">
             <div class="section-title">
-                <h2>Tipe Lapangan</h2>
+                <h2>Kebutuhan Tipe</h2>
                 <span>Statistik</span>
             </div>
             <div class="type-stats">
@@ -172,8 +208,8 @@ $appName = appName($conn);
         </article>
     </section>
 
-    <section class="dashboard-grid three-columns">
-        <article class="dashboard-card wide">
+            <section class="dashboard-grid three-columns">
+                <article class="dashboard-card wide">
             <div class="section-title">
                 <h2>Daftar Lapangan</h2>
                 <span id="filteredCount"><?= $totalCourts ?> data</span>
@@ -216,23 +252,25 @@ $appName = appName($conn);
             </table>
         </article>
 
-        <article class="dashboard-card">
-            <div class="section-title">
-                <h2>Reservasi Terbaru</h2>
-                <span><?= count($recentBookings) ?> data</span>
-            </div>
-            <div class="alert-list">
-                <?php foreach ($recentBookings as $booking): ?>
-                    <a href="../controllers/BookingController.php">
-                        <strong><?= h($booking['nama_lapangan']) ?></strong>
-                        <span><?= h($booking['username']) ?> - <?= h(date('d M Y', strtotime($booking['tanggal']))) ?>, <?= h(substr($booking['jam_mulai'], 0, 5)) ?></span>
-                    </a>
-                <?php endforeach; ?>
-                <?php if (!$recentBookings): ?>
-                    <p>Belum ada reservasi.</p>
-                <?php endif; ?>
-            </div>
-        </article>
+                <article class="dashboard-card">
+                    <div class="section-title">
+                        <h2>Aktivitas Terbaru</h2>
+                        <span><?= count($recentBookings) ?> data</span>
+                    </div>
+                    <div class="alert-list">
+                        <?php foreach ($recentBookings as $booking): ?>
+                            <a href="../controllers/BookingController.php">
+                                <strong><?= h($booking['nama_lapangan']) ?></strong>
+                                <span><?= h($booking['username']) ?> - <?= h(date('d M Y', strtotime($booking['tanggal']))) ?>, <?= h(substr($booking['jam_mulai'], 0, 5)) ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                        <?php if (!$recentBookings): ?>
+                            <p>Belum ada reservasi.</p>
+                        <?php endif; ?>
+                    </div>
+                </article>
+            </section>
+        </div>
     </section>
 </div>
 

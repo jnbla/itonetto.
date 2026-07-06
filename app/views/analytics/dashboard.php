@@ -14,6 +14,18 @@
         </div>
     </section>
 
+    <section class="dashboard-card">
+        <div class="section-title">
+            <h2>Fokus analitik</h2>
+            <span>Ringkas</span>
+        </div>
+        <div class="stats-list">
+            <p><span>Revenue total</span><strong>Rp <?= number_format((float)$totalRevenue, 0, ',', '.') ?></strong></p>
+            <p><span>Booking aktif</span><strong><?= (int)(($bookingStats['Disetujui'] ?? 0) + ($bookingStats['Menunggu'] ?? 0)) ?></strong></p>
+            <p><span>Lapangan maintenance</span><strong><?= (int)($courtStats['maintenance'] ?? 0) ?></strong></p>
+        </div>
+    </section>
+
     <!-- Revenue Summary -->
     <section class="summary-grid">
         <article class="metric-card">

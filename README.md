@@ -1,62 +1,55 @@
 # Badminton Court Booking
 
-Aplikasi booking/reservasi penggunaan lapangan bulutangkis berbasis PHP MVC sederhana dan MySQL lokal.
+Aplikasi sederhana untuk reservasi lapangan bulutangkis menggunakan PHP MVC dan MySQL.
 
 ## Fitur Utama
 
-- Arsitektur MVC dengan folder `controllers`, `models`, dan `views`.
-- Autentikasi register/login dengan `password_hash()` dan `password_verify()`.
-- Otorisasi role `admin` dan `user`.
-- CRUD penuh untuk modul utama manajemen lapangan.
+- Struktur MVC dengan `controllers`, `models`, dan `views`.
+- Register dan login dengan password tersimpan aman menggunakan `password_hash()`.
+- Role `admin` dan `user` untuk pembatasan akses.
+- CRUD lengkap untuk manajemen lapangan.
 - Upload foto lapangan ke folder `uploads`.
-- Reservasi lapangan oleh user biasa.
-- Admin dapat menyetujui, membatalkan, dan menyelesaikan reservasi.
-- Deteksi bentrok jadwal booking pada lapangan dan tanggal yang sama.
-- Laporan lapangan dan export CSV.
-- Prepared statements digunakan pada query input pengguna.
-
-## Bukti Kriteria Dosen
-
-1. MVC: `app/controllers`, `app/models`, dan `app/views` sudah dipisah sebagai controller, model, dan view.
-2. CRUD: Modul `Transport`/`courts` mendukung create, read, update, delete penuh.
-3. Autentikasi & Otorisasi: register/login, `password_hash`, `password_verify`, dan role `admin` vs `user` ada di `app/views/login.php`, `app/views/register.php`, serta helper `app/helpers/auth.php`.
-4. Keamanan: input pengguna menggunakan prepared statements di model `app/models/*`; password telah di-hash.
-5. Upload file: fitur upload gambar lapangan tersedia di `TransportController::store()` / `TransportController::update()` dan helper `app/helpers/ImageOptimizer.php`.
+- User bisa membuat reservasi dan melihat riwayat booking.
+- Admin bisa mengelola lapangan, melihat semua booking, dan mengubah status reservasi.
+- Deteksi bentrok jadwal untuk booking lapangan.
+- Export data lapangan ke CSV.
+- Prepared statements digunakan di query input pengguna.
 
 ## Struktur Folder
 
-- `app/controllers` berisi controller aplikasi.
-- `app/models` berisi model dan query database.
-- `app/views` berisi tampilan halaman.
-- `app/helpers` berisi helper auth dan settings.
-- `config/database.php` berisi koneksi MySQL lokal.
-- `database/schema.sql` berisi struktur database dari nol.
-- `database/seed.php` berisi data contoh lapangan.
-- `uploads` berisi foto lapangan yang diunggah.
+- `app/controllers`: controller aplikasi.
+- `app/models`: model dan query database.
+- `app/views`: tampilan halaman.
+- `app/helpers`: helper untuk auth, settings, upload, dll.
+- `config/database.php`: konfigurasi koneksi database.
+- `database/schema.sql`: struktur database.
+- `database/seed.php`: data contoh untuk awal.
+- `uploads`: tempat penyimpanan gambar lapangan.
 
 ## Cara Menjalankan di XAMPP
 
-1. Letakkan folder proyek di `c:/xampp/htdocs/airport_inventory`.
-2. Jalankan Apache dan MySQL dari XAMPP.
+1. Letakkan folder proyek di `c:/xampp/htdocs/IkiNet`.
+2. Jalankan Apache dan MySQL di XAMPP.
 3. Buka phpMyAdmin.
 4. Import `database/schema.sql`.
-5. Buka `http://localhost/IkiNet/public/`.
-6. Register akun pertama. Akun pertama otomatis mendapat role `admin`.
+5. Akses `http://localhost/IkiNet/public/`.
+6. Daftar akun baru. Akun pertama akan menjadi admin.
 
 ## Database
 
-Database default: `badminton_booking`.
-
-Jika ingin memakai nama database lain, ubah nilai `$db` di `config/database.php`.
+- Database default: `badminton_booking`.
+- Ubah nama database pada `config/database.php` jika perlu.
 
 Tabel utama:
 
-- `users`: akun pengguna dan role.
-- `courts`: data lapangan untuk CRUD utama.
-- `bookings`: data reservasi lapangan.
-- `settings`: konfigurasi nama aplikasi.
+- `users`: data akun dan role.
+- `courts`: data lapangan.
+- `bookings`: data reservasi.
+- `settings`: konfigurasi aplikasi.
 
-## Role
+## Peran Pengguna
 
 - `admin`: kelola lapangan, upload foto, lihat semua reservasi, dan ubah status booking.
-- `user`: melihat lapangan, membuat reservasi, dan membatalkan booking miliknya sendiri.
+- `user`: melihat lapangan, membuat reservasi, dan membatalkan reservasi sendiri.
+
+1. [ ]

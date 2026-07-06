@@ -1,9 +1,20 @@
 <style>
 body {
     margin: 0;
-    font-family: "MS Mincho", "\ff2d\ff33 \660e\671d", serif;
-    background: #ffffff;
+    font-family: "Courier New", Courier, monospace;
+    background: linear-gradient(180deg, #f7f5ef 0%, #e4e1d5 100%);
     color: #111;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.15;
+    background-image: linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 36px 36px;
 }
 
 .container {
@@ -13,28 +24,35 @@ body {
 }
 
 h2 {
-    border-bottom: 2px solid black;
-    padding-bottom: 5px;
+    margin: 0 0 10px;
+    font-size: 20px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 2px solid #111;
+    padding-bottom: 8px;
 }
 
 button,
 a.button {
-    background: #000;
-    color: #fff;
-    padding: 8px 14px;
-    border: 1px solid #000;
+    background: #fff;
+    color: #111;
+    padding: 10px 16px;
+    border: 3px solid #111;
+    border-radius: 4px;
     text-decoration: none;
     display: inline-block;
     margin-top: 10px;
     cursor: pointer;
-    transition: 0.2s;
-    font-family: "MS Mincho", "\ff2d\ff33 \660e\671d", serif;
+    transition: transform 0.1s ease, background 0.1s ease;
+    font-family: "Courier New", Courier, monospace;
+    box-shadow: 4px 4px 0 #111;
 }
 
 button:hover,
 a.button:hover {
-    background: #fff;
-    color: #000;
+    background: #111;
+    color: #fff;
+    transform: translate(-2px, -2px);
 }
 
 table {
@@ -45,9 +63,13 @@ table {
 
 table th,
 table td {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 2px solid #111;
     padding: 10px;
     text-align: left;
+}
+
+table th {
+    background: #fff;
 }
 
 table th {
@@ -57,11 +79,20 @@ table th {
 input,
 select {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
+    padding: 10px 12px;
+    border: 3px solid #111;
     margin-top: 5px;
     box-sizing: border-box;
-    font-family: "MS Mincho", "\ff2d\ff33 \660e\671d", serif;
+    font-family: "Courier New", Courier, monospace;
+    border-radius: 0;
+    background: #f5f5f5;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 3px #111;
 }
 
 a {
@@ -86,7 +117,7 @@ a {
 }
 
 .dashboard-shell {
-    max-width: 1180px;
+    max-width: 1220px;
     margin: 0 auto;
     padding: 34px 28px 56px;
 }
@@ -100,20 +131,90 @@ a {
     padding-bottom: 28px;
 }
 
+.admin-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    padding: 24px;
+    border: 2px solid #111;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f2e8 100%);
+    box-shadow: 8px 8px 0 #e5e7eb;
+}
+
+.admin-header-copy h1 {
+    margin: 0;
+    font-size: 40px;
+    line-height: 1.05;
+}
+
+.admin-header-copy p {
+    margin: 10px 0 0;
+    max-width: 680px;
+    color: #555;
+}
+
+.admin-header-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.admin-dashboard-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.admin-sidebar {
+    display: grid;
+    gap: 16px;
+}
+
+.admin-sidebar-card {
+    border: 2px solid #111;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.95);
+    padding: 16px;
+    box-shadow: 6px 6px 0 #e5e7eb;
+}
+
+.admin-sidebar-card strong {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.admin-sidebar-card ul {
+    margin: 0;
+    padding-left: 18px;
+    color: #555;
+    display: grid;
+    gap: 6px;
+}
+
+.admin-link-list {
+    display: grid;
+    gap: 8px;
+}
+
+.admin-link-list a {
+    text-decoration: none;
+    color: #111;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-main-stack {
+    display: grid;
+    gap: 18px;
+}
+
 .dashboard-kicker {
     margin: 0 0 8px;
     font-size: 13px;
-}
-
-.dashboard-hero h1 {
-    margin: 0;
-    font-size: 42px;
-    font-weight: 500;
-    line-height: 1.08;
-}
-
-.dashboard-hero p {
-    margin: 10px 0 0;
 }
 
 .profile-card {
@@ -122,8 +223,11 @@ a {
     grid-template-columns: 46px 1fr;
     gap: 12px;
     align-items: center;
-    border: 1px solid #111;
+    border: 2px solid #111;
     padding: 14px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 6px 6px 0 #e5e7eb;
 }
 
 .profile-avatar {
@@ -172,10 +276,27 @@ a {
 }
 
 .metric-card,
-.dashboard-card {
-    border: 1px solid #111;
-    background: #fff;
+.dashboard-card,
+.profile-card,
+.dashboard-note,
+.transport-form-card,
+.transport-preview-card {
+    border: 2px solid #111;
+    background: rgba(255,255,255,0.95);
     padding: 18px;
+    border-radius: 18px;
+    box-shadow: 6px 6px 0 #e5e7eb;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover,
+.dashboard-card:hover,
+.profile-card:hover,
+.dashboard-note:hover,
+.transport-form-card:hover,
+.transport-preview-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 8px 8px 0 #d1d5db;
 }
 
 .metric-card span,
@@ -216,6 +337,29 @@ a {
     margin-top: 22px;
 }
 
+.dashboard-note {
+    flex: 1;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    border: 2px solid #111;
+    border-radius: 16px;
+    background: #fafafa;
+    box-shadow: 4px 4px 0 #e5e7eb;
+}
+
+.dashboard-note strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.dashboard-note span {
+    color: #555;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
 .dashboard-filter {
     flex: 1;
     display: grid;
@@ -225,10 +369,12 @@ a {
 
 .dashboard-filter input,
 .dashboard-filter select {
-    height: 42px;
+    height: 44px;
     margin: 0;
     border-color: #111;
     background: #fff;
+    border-radius: 999px;
+    padding: 0 14px;
 }
 
 .quick-actions {
@@ -252,9 +398,9 @@ a.button.secondary:hover {
     justify-content: space-between;
     gap: 16px;
     align-items: baseline;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     border-bottom: 1px solid #111;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
 }
 
 .section-title h2 {
@@ -396,10 +542,17 @@ a.button.secondary:hover {
     font-size: 14px;
 }
 
+.dashboard-table th {
+    background: #f4f1e8;
+    color: #222;
+}
+
 .status-pill {
     display: inline-block;
     border: 1px solid #111;
     padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 12px;
 }
 
 .status-pill.good {
@@ -415,8 +568,9 @@ a.button.secondary:hover {
 .alert-list a {
     display: block;
     border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
+    padding: 8px 0 10px;
     text-decoration: none;
+    border-radius: 8px;
 }
 
 .alert-list strong,
@@ -527,48 +681,115 @@ a.button.secondary:hover {
     flex-wrap: wrap;
 }
 
-.transport-form-layout {
+.booking-shell {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 34px 28px 56px;
+}
+
+.booking-topbar {
     display: grid;
-    grid-template-columns: minmax(320px, 1fr) minmax(320px, 440px);
+    grid-template-columns: 1fr auto;
     gap: 24px;
-    margin-top: 20px;
-}
-
-.transport-form-card,
-.transport-preview-card {
-    border: 1px solid #e0e0e0;
+    align-items: start;
+    padding: 24px;
+    border: 4px solid #111;
+    border-radius: 24px;
     background: #fff;
-    padding: 28px;
-    box-shadow: 0 16px 38px rgba(0,0,0,0.05);
+    box-shadow: 10px 10px 0 #111;
 }
 
-.transport-form {
+.breadcrumb {
+    margin: 0 0 10px;
+    color: #777;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.booking-topbar h1 {
+    margin: 0;
+    font-size: 42px;
+    line-height: 1.05;
+    letter-spacing: 0.08em;
+}
+
+.booking-intro {
+    margin: 12px 0 0;
+    color: #222;
+    max-width: 600px;
+    line-height: 1.7;
+}
+
+.booking-actions-top {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.booking-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(360px, 1fr) 320px;
+    gap: 24px;
+    margin-top: 28px;
+}
+
+.booking-main-card,
+.booking-sidebar,
+.booking-courts-overview {
+    width: 100%;
+}
+
+.booking-main-card,
+.booking-sidebar .dashboard-card,
+.booking-courts-overview .dashboard-card {
+    border: 4px solid #111;
+    background: #fff;
+    padding: 24px;
+    border-radius: 18px;
+    box-shadow: 10px 10px 0 #111;
+}
+
+.booking-form {
     display: grid;
     gap: 18px;
 }
 
-.transport-form label {
+.booking-form label {
     display: grid;
-    gap: 8px;
+    gap: 10px;
 }
 
-.transport-form label span {
-    font-size: 14px;
-    font-weight: 600;
+.booking-form label span {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
 }
 
-.transport-form input,
-.transport-form select {
-    height: 48px;
+.booking-form input,
+.booking-form select {
+    height: 50px;
     margin: 0;
-    border: 1px solid #d7d7d7;
-    border-radius: 10px;
-    background: #fafafa;
+    border: 3px solid #111;
+    border-radius: 0;
+    background: #fdfdfd;
     padding: 0 14px;
+    font-size: 15px;
 }
 
-.transport-form select {
-    background: #fff;
+.booking-form textarea {
+    min-height: 90px;
+    padding: 12px 14px;
+    resize: vertical;
+}
+
+.booking-form input:focus,
+.booking-form select:focus,
+.booking-form textarea:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 3px #111;
 }
 
 .form-grid {
@@ -581,25 +802,27 @@ a.button.secondary:hover {
     display: flex;
     gap: 14px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .form-actions button,
-.form-actions a {
+.form-actions .button {
     min-width: 140px;
 }
 
-.transport-preview-card {
+.booking-preview-stack {
     display: grid;
-    gap: 18px;
+    gap: 16px;
 }
 
 .booking-court-card {
     display: grid;
     gap: 14px;
-    border: 1px solid #f0f0f0;
-    padding: 18px;
+    border: 4px solid #111;
+    padding: 20px;
     border-radius: 18px;
-    background: #fdfdfd;
+    background: #fff;
+    box-shadow: 10px 10px 0 #111;
 }
 
 .booking-court-card.compact {
@@ -607,32 +830,118 @@ a.button.secondary:hover {
     align-items: center;
 }
 
+.booking-court-image {
+    width: 100px;
+    height: 78px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 3px solid #111;
+}
+
+.booking-court-content h3,
+.booking-court-card h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+}
+
+.booking-court-content p,
+.booking-court-card p {
+    margin: 0;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.booking-court-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.booking-court-meta li,
+.booking-court-meta strong {
+    display: inline-block;
+    padding: 8px 10px;
+    border: 2px solid #111;
+    border-radius: 10px;
+    background: #f7f5ef;
+    color: #111;
+    font-size: 13px;
+}
+
+.compact-card input[type="search"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 3px solid #111;
+    border-radius: 999px;
+    background: #fdfdfd;
+    margin: 12px 0 16px;
+}
+
+.quick-list,
+.featured-links {
+    display: grid;
+    gap: 10px;
+}
+
+.quick-list a,
+.featured-links a {
+    text-decoration: none;
+    color: #111;
+    padding: 12px 14px;
+    border: 3px solid #111;
+    border-radius: 0;
+    background: #fff;
+    box-shadow: 4px 4px 0 #111;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.quick-list a:hover,
+.featured-links a:hover {
+    background: #111;
+    color: #fff;
+    transform: translate(-2px, -2px);
+}
+
+.featured-card {
+    border: 3px solid #111;
+    border-radius: 0;
+    padding: 18px;
+    background: #fff;
+}
+
+.mini-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.mini-calendar span {
+    min-height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #fff;
+    border: 3px solid #111;
+    color: #333;
+    font-size: 14px;
+}
+
+.mini-calendar .today {
+    background: #111;
+    color: #fff;
+}
+
 .booking-court-card.compact img {
     width: 100px;
     height: 80px;
     border-radius: 14px;
     object-fit: cover;
-    border: 1px solid #eee;
-}
-
-.booking-court-card h3 {
-    margin: 0;
-    font-size: 18px;
-}
-
-.booking-court-card p {
-    margin: 0;
-    color: #555;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-.booking-court-meta {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    color: #333;
-    font-size: 14px;
+    border: 3px solid #111;
 }
 
 .booking-court-meta strong {
@@ -644,7 +953,7 @@ a.button.secondary:hover {
     aspect-ratio: 16 / 9;
     object-fit: cover;
     border-radius: 18px;
-    border: 1px solid #eee;
+    border: 3px solid #111;
 }
 
 .dashboard-grid.three-columns.booking-court-grid {
@@ -678,9 +987,10 @@ a.button.secondary:hover {
 .transport-toolbar input,
 .transport-toolbar select,
 .transport-toolbar button {
-    height: 42px;
+    height: 44px;
     margin: 0;
     border-color: #111;
+    border-radius: 999px;
 }
 
 .transport-toolbar button {
@@ -910,6 +1220,126 @@ a.button.secondary:hover {
     margin-top: 18px;
 }
 
+.booking-hero {
+    display: grid;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: 24px;
+    align-items: center;
+    margin-top: 20px;
+    padding: 30px;
+    border: 4px solid #111;
+    border-radius: 0;
+    background: #fff;
+    color: #111;
+    box-shadow: 8px 8px 0 #111;
+}
+
+.booking-hero-user {
+    background: #fff;
+    color: #111;
+}
+
+.booking-hero-copy h1 {
+    margin: 0 0 10px;
+    font-size: 36px;
+    line-height: 1.05;
+    font-family: "Courier New", Courier, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+}
+
+.booking-hero-copy p {
+    margin: 0;
+    color: #111;
+    max-width: 620px;
+    line-height: 1.6;
+}
+
+.booking-hero-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.booking-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    border-radius: 0;
+    background: #fff;
+    border: 3px solid #111;
+    font-size: 13px;
+    color: #111;
+    box-shadow: 4px 4px 0 #111;
+}
+
+.booking-hero-card {
+    padding: 22px;
+    border-radius: 0;
+    background: #fff;
+    border: 4px solid #111;
+    box-shadow: 8px 8px 0 #111;
+}
+
+.booking-hero-card h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    letter-spacing: 0.08em;
+}
+
+.booking-hero-card ul {
+    margin: 0;
+    padding-left: 18px;
+    color: #111;
+    display: grid;
+    gap: 8px;
+}
+
+.booking-hero-card-accent {
+    background: #fff;
+    border: 3px solid #111;
+}
+
+.booking-preview-stack {
+    display: grid;
+    gap: 16px;
+}
+
+.metric-card {
+    border-radius: 18px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.dashboard-card.transport-table-card {
+    border-radius: 24px;
+    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+}
+
+.transport-preview-card {
+    border-radius: 24px;
+    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+}
+
+.transport-form-card {
+    border-radius: 24px;
+    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+}
+
+@media (max-width: 980px) {
+    .booking-hero,
+    .transport-form-layout,
+    .summary-grid,
+    .dashboard-grid.three-columns.booking-court-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-hero-card {
+        order: -1;
+    }
+}
+
 @media print {
     .receipt-page {
         background: #fff;
@@ -1002,8 +1432,8 @@ a.button.secondary:hover {
 .auth-page {
     min-height: 100vh;
     background:
-        linear-gradient(90deg, #f4f4f4 1px, transparent 1px),
-        linear-gradient(#f4f4f4 1px, transparent 1px),
+        linear-gradient(90deg, #f5f5f5 1px, transparent 1px),
+        linear-gradient(#f5f5f5 1px, transparent 1px),
         #fff;
     background-size: 48px 48px;
 }
@@ -1017,11 +1447,13 @@ a.button.secondary:hover {
 }
 
 .auth-panel {
-    width: min(100%, 380px);
-    border: 1px solid #111;
+    width: min(100%, 420px);
+    border: 2px solid #111;
     background: #fff;
     padding: 36px;
     box-sizing: border-box;
+    border-radius: 24px;
+    box-shadow: 10px 10px 0 #e5e7eb;
 }
 
 .auth-kicker {
@@ -1047,31 +1479,38 @@ a.button.secondary:hover {
     font-size: 14px;
 }
 
-.auth-form input {
-    height: 42px;
+.auth-form input,
+.auth-form select {
+    height: 46px;
     margin: 0 0 6px;
-    border: 1px solid #111;
+    border: 2px solid #111;
     background: #fff;
     font-size: 15px;
+    border-radius: 10px;
+    padding: 0 12px;
+    box-shadow: 4px 4px 0 #f3f4f6;
 }
 
-.auth-form input:focus {
+.auth-form input:focus,
+.auth-form select:focus {
     outline: 2px solid #111;
     outline-offset: 2px;
 }
 
 .auth-form button {
     width: 100%;
-    height: 42px;
+    height: 46px;
     margin-top: 8px;
     font-size: 15px;
 }
 
 .auth-message {
-    border: 1px solid #111;
+    border: 2px solid #111;
+    border-radius: 12px;
     padding: 10px 12px;
     margin-bottom: 18px;
     font-size: 14px;
+    box-shadow: 4px 4px 0 #f3f4f6;
 }
 
 .auth-message.success {

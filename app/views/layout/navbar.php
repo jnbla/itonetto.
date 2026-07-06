@@ -8,6 +8,13 @@ require_once __DIR__ . "/../../helpers/settings.php";
 require_once __DIR__ . "/../../helpers/auth.php";
 $appName = appName($conn);
 $isAdmin = isAdmin();
+$currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
+
+function isNavActive($targetPath, $currentPath) {
+    $target = rtrim($targetPath, '/');
+    $current = rtrim($currentPath, '/');
+    return $current === $target || strpos($current, $target) === 0;
+}
 ?>
 
 <?php include __DIR__ . "/style.php"; ?>
@@ -24,35 +31,43 @@ $isAdmin = isAdmin();
     align-items: center;
     border-bottom: 1px solid #ddd;
     padding: 16px 32px;
-    background: #fff;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 14px rgba(0,0,0,0.05);
 }
 
 .nav-title {
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.nav-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
 }
 
 .nav-menu a {
-    margin-left: 25px;
+    margin-left: 0;
     text-decoration: none;
-    color: black;
+    color: #111;
     position: relative;
     font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+    background: #111;
+    color: #fff;
 }
 
 .nav-menu a::after {
-    content: "";
-    position: absolute;
-    width: 0%;
-    height: 1px;
-    left: 0;
-    bottom: -2px;
-    background: black;
-    transition: 0.3s;
-}
-
-.nav-menu a:hover::after {
-    width: 100%;
+    display: none;
 }
 </style>
 
@@ -61,12 +76,12 @@ $isAdmin = isAdmin();
 
     <div class="nav-menu">
         <?php if ($isAdmin): ?>
-            <a href="/IkiNet/app/controllers/TransportController.php">Dashboard Admin</a>
-            <a href="/IkiNet/app/controllers/TransportController.php">Lapangan</a>
-            <a href="/IkiNet/app/controllers/BookingController.php">Reservasi</a>
-            <a href="/IkiNet/app/controllers/AnalyticsController.php">Analytics</a>
-            <a href="/IkiNet/app/controllers/TransportController.php?action=audit_log">Audit Log</a>
-            <a href="/IkiNet/app/controllers/SettingController.php">Settings</a>
+            <a href="/IkiNet/app/controllers/DashboardController.php" class="<?= isNavActive('/IkiNet/app/controllers/DashboardController.php', $currentPath) ? 'active' : '' ?>">Dashboard Admin</a>
+            <a href="/IkiNet/app/controllers/TransportController.php" class="<?= isNavActive('/IkiNet/app/controllers/TransportController.php', $currentPath) ? 'active' : '' ?>">Lapangan</a>
+            <a href="/IkiNet/app/controllers/BookingController.php" class="<?= isNavActive('/IkiNet/app/controllers/BookingController.php', $currentPath) ? 'active' : '' ?>">Reservasi</a>
+            <a href="/IkiNet/app/controllers/AnalyticsController.php" class="<?= isNavActive('/IkiNet/app/controllers/AnalyticsController.php', $currentPath) ? 'active' : '' ?>">Analytics</a>
+            <a href="/IkiNet/app/controllers/TransportController.php?action=audit_log" class="<?= isNavActive('/IkiNet/app/controllers/TransportController.php', $currentPath) && strpos($currentPath, 'audit_log') !== false ? 'active' : '' ?>">Audit Log</a>
+            <a href="/IkiNet/app/controllers/SettingController.php" class="<?= isNavActive('/IkiNet/app/controllers/SettingController.php', $currentPath) ? 'active' : '' ?>">Settings</a>
         <?php else: ?>
             <a href="/IkiNet/app/controllers/BookingController.php?action=user">Booking Saya</a>
             <a href="/IkiNet/app/controllers/BookingController.php?action=create">Booking Baru</a>

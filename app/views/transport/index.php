@@ -70,6 +70,14 @@ sort($locations);
         </article>
     </section>
 
+    <section class="dashboard-card">
+        <div class="section-title">
+            <h2>Info singkat</h2>
+            <span>Kelola cepat</span>
+        </div>
+        <p class="muted">Gunakan filter di bawah untuk menemukan lapangan tertentu, lalu edit atau nonaktifkan dari satu tempat tanpa membuka banyak halaman.</p>
+    </section>
+
     <section class="transport-toolbar">
         <input type="search" id="transportSearch" placeholder="Cari nama, ID, tipe, atau lokasi">
         <select id="transportType">

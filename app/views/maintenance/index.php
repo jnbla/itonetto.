@@ -62,6 +62,14 @@ while ($row = $maintenances->fetch_assoc()) {
         </article>
     </section>
 
+    <section class="dashboard-card">
+        <div class="section-title">
+            <h2>Info singkat</h2>
+            <span>Prioritas</span>
+        </div>
+        <p class="muted">Perbarui status maintenance dari tabel untuk menjaga lapangan tetap siap dipakai dan menghindari penumpukan jadwal yang tertunda.</p>
+    </section>
+
     <section class="location-layout">
         <?php if ($canManage): ?>
             <article class="transport-form-card">

@@ -86,9 +86,9 @@ while ($row = $courts->fetch_assoc()) {
                 </div>
                 <input type="search" placeholder="Cari lapangan, lokasi, atau harga">
                 <div class="quick-list">
-                    <a href="#">View Calendar</a>
-                    <a href="#">Edit Profile</a>
-                    <a href="#">Settings</a>
+                    <a href="/IkiNet/app/controllers/BookingController.php?action=user">View Calendar</a>
+                    <a href="/IkiNet/app/controllers/ProfileController.php">Edit Profile</a>
+                    <a href="/IkiNet/app/controllers/ProfileController.php">Settings</a>
                 </div>
                 <div class="quick-recent">
                     <strong>Recent</strong>

@@ -682,17 +682,17 @@ a.button.secondary:hover {
 }
 
 .booking-shell {
-    max-width: 1220px;
+    max-width: 1160px;
     margin: 0 auto;
-    padding: 34px 28px 56px;
+    padding: 36px 32px 56px;
 }
 
 .booking-topbar {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 24px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 22px;
     align-items: start;
-    padding: 24px;
+    padding: 28px 28px;
     border: 4px solid #111;
     border-radius: 24px;
     background: #fff;
@@ -716,29 +716,28 @@ a.button.secondary:hover {
 
 .booking-intro {
     margin: 12px 0 0;
-    color: #222;
-    max-width: 600px;
+    color: #333;
+    max-width: 620px;
     line-height: 1.7;
 }
 
 .booking-actions-top {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     flex-wrap: wrap;
     justify-content: flex-end;
 }
 
 .booking-dashboard-grid {
     display: grid;
-    grid-template-columns: minmax(360px, 1fr) 320px;
+    grid-template-columns: minmax(380px, 1fr) 340px;
     gap: 24px;
-    margin-top: 28px;
+    margin-top: 30px;
 }
 
-.booking-main-card,
-.booking-sidebar,
-.booking-courts-overview {
-    width: 100%;
+.booking-sidebar {
+    display: grid;
+    gap: 20px;
 }
 
 .booking-main-card,
@@ -746,7 +745,7 @@ a.button.secondary:hover {
 .booking-courts-overview .dashboard-card {
     border: 4px solid #111;
     background: #fff;
-    padding: 24px;
+    padding: 26px;
     border-radius: 18px;
     box-shadow: 10px 10px 0 #111;
 }
@@ -758,29 +757,30 @@ a.button.secondary:hover {
 
 .booking-form label {
     display: grid;
-    gap: 10px;
-}
-
-.booking-form label span {
+    gap: 8px;
+    text-transform: uppercase;
     font-size: 13px;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 0.12em;
 }
 
 .booking-form input,
 .booking-form select {
-    height: 50px;
+    height: 52px;
     margin: 0;
     border: 3px solid #111;
     border-radius: 0;
     background: #fdfdfd;
     padding: 0 14px;
-    font-size: 15px;
+    font-size: 14px;
+}
+
+.booking-form input::placeholder {
+    color: #777;
 }
 
 .booking-form textarea {
-    min-height: 90px;
+    min-height: 96px;
     padding: 12px 14px;
     resize: vertical;
 }
@@ -795,7 +795,7 @@ a.button.secondary:hover {
 .form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: 18px;
 }
 
 .form-actions {
@@ -807,12 +807,21 @@ a.button.secondary:hover {
 
 .form-actions button,
 .form-actions .button {
-    min-width: 140px;
+    min-width: 150px;
 }
 
 .booking-preview-stack {
     display: grid;
-    gap: 16px;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.booking-courts-overview {
+    margin-top: 34px;
+}
+
+.booking-courts-overview .section-title {
+    margin-bottom: 18px;
 }
 
 .booking-court-card {

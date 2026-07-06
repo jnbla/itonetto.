@@ -85,6 +85,7 @@ function isNavActive($targetPath, $currentPath) {
         <?php else: ?>
             <a href="/IkiNet/app/controllers/BookingController.php?action=user">Booking Saya</a>
             <a href="/IkiNet/app/controllers/BookingController.php?action=create">Booking Baru</a>
+            <a href="/IkiNet/app/controllers/ProfileController.php">Profil</a>
         <?php endif; ?>
         <a href="/IkiNet/app/views/logout.php">Logout</a>
     </div>

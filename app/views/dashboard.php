@@ -7,6 +7,7 @@ if (!isset($dashboardData)) {
     require_once __DIR__ . "/../../config/database.php";
     require_once __DIR__ . "/../models/Dashboard.php";
     require_once __DIR__ . "/../helpers/settings.php";
+    require_once __DIR__ . "/../helpers/QRCode.php";
 
     $dashboard = new Dashboard($conn);
     $dashboardData = $dashboard->getData();
@@ -41,235 +42,135 @@ $appName = appName($conn);
         </div>
     </section>
 
-    <section class="admin-dashboard-layout">
-        <aside class="admin-sidebar">
-            <div class="profile-card">
-                <div class="profile-avatar"><?= h(strtoupper(substr($_SESSION["user"], 0, 1))) ?></div>
-                <div>
-                    <strong><?= h($_SESSION["user"]) ?></strong>
-                    <span><?= h($userRole) ?></span>
-                </div>
-                <a href="/IkiNet/app/views/logout.php">Logout</a>
-            </div>
-
-            <div class="admin-sidebar-card">
-                <strong>Prioritas hari ini</strong>
-                <ul>
-                    <li>Konfirmasi booking menunggu</li>
-                    <li>Cek lapangan maintenance</li>
-                    <li>Pantau aktivitas terbaru</li>
-                </ul>
-            </div>
-
-            <div class="admin-sidebar-card">
-                <strong>Akses cepat</strong>
-                <div class="admin-link-list">
-                    <a href="../controllers/BookingController.php?action=user">Booking Saya</a>
-                    <a href="../controllers/AnalyticsController.php">Analytics</a>
-                    <a href="../controllers/SettingController.php">Settings</a>
-                </div>
-            </div>
-        </aside>
-
-        <div class="admin-main-stack">
-            <section class="summary-grid">
-        <article class="metric-card">
-            <span>Total Lapangan</span>
-            <strong><?= $totalCourts ?></strong>
-            <small>Data aktif sistem</small>
-        </article>
-        <article class="metric-card">
-            <span>Siap Booking</span>
-            <strong><?= $activeCourts ?></strong>
-            <small>Lapangan aktif</small>
-        </article>
-        <article class="metric-card alert">
-            <span>Menunggu</span>
-            <strong><?= $waitingBookings ?></strong>
-            <small>Reservasi perlu konfirmasi</small>
-        </article>
-        <article class="metric-card">
-            <span>Disetujui</span>
-            <strong><?= $approvedBookings ?></strong>
-            <small>Reservasi berjalan</small>
-        </article>
-    </section>
-
-    <section class="dashboard-tools">
-        <div class="dashboard-note">
-            <div>
-                <strong>Prioritas hari ini</strong>
-                <span>Konfirmasi booking yang menunggu, cek lapangan maintenance, dan pantau aktivitas terbaru dari satu panel.</span>
-            </div>
+    <section class="dashboard-main">
+        <div class="summary-grid">
+            <article class="metric-card">
+                <span>Total Lapangan</span>
+                <strong><?= $totalCourts ?></strong>
+                <small>Jumlah lapangan tersedia</small>
+            </article>
+            <article class="metric-card">
+                <span>Lapangan Aktif</span>
+                <strong><?= $activeCourts ?></strong>
+                <small>Siap digunakan</small>
+            </article>
+            <article class="metric-card alert">
+                <span>Menunggu</span>
+                <strong><?= $waitingBookings ?></strong>
+                <small>Perlu konfirmasi</small>
+            </article>
+            <article class="metric-card">
+                <span>Disetujui</span>
+                <strong><?= $approvedBookings ?></strong>
+                <small>Booking berjalan</small>
+            </article>
         </div>
 
-        <div class="quick-actions">
-            <a class="button" href="../controllers/BookingController.php?action=create">Buat Booking</a>
-            <a class="button secondary" href="../controllers/BookingController.php?action=user">Booking Saya</a>
-            <a class="button secondary" href="../controllers/TransportController.php">Kelola Lapangan</a>
-        </div>
-    </section>
-
-    <section class="dashboard-tools">
-        <form class="dashboard-filter" id="dashboardFilter">
-            <input type="search" id="searchInput" placeholder="Cari nama, ID, tipe, atau lokasi lapangan">
-            <select id="typeFilter">
-                <option value="">Semua tipe</option>
-                <?php foreach ($types as $type): ?>
-                    <option value="<?= h(strtolower($type)) ?>"><?= h($type) ?></option>
-                <?php endforeach; ?>
-            </select>
-            <select id="conditionFilter">
-                <option value="">Semua status</option>
-                <option value="aktif">Aktif</option>
-                <option value="maintenance">Maintenance</option>
-            </select>
-            <select id="locationFilter">
-                <option value="">Semua lokasi</option>
-                <?php foreach ($locations as $location): ?>
-                    <option value="<?= h(strtolower($location)) ?>"><?= h($location) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </form>
-    </section>
-
-    <section class="dashboard-grid two-columns">
-        <article class="dashboard-card">
-            <div class="section-title">
-                <h2>Prioritas Booking</h2>
-                <span>Ringkas</span>
-            </div>
-            <div class="type-stats">
-                <?php foreach ($bookingStatus as $status => $count): ?>
-                    <div>
-                        <strong><?= h($status) ?></strong>
-                        <span><?= (int) $count ?> reservasi</span>
-                        <progress value="<?= (int) $count ?>" max="<?= max($bookingStatus ?: [1]) ?>"></progress>
+        <div class="panel-grid">
+            <main class="dashboard-panel">
+                <section class="dashboard-card">
+                    <div class="section-title">
+                        <h2>Daftar Lapangan</h2>
+                        <span id="filteredCount"><?= $totalCourts ?> data</span>
                     </div>
-                <?php endforeach; ?>
-            </div>
-        </article>
-
-        <article class="dashboard-card">
-            <div class="section-title">
-                <h2>Distribusi Lokasi</h2>
-                <span>Lokasi</span>
-            </div>
-            <div class="bar-list">
-                <?php foreach (array_slice($byLocation, 0, 6, true) as $location => $count): ?>
-                    <div class="bar-row">
-                        <span><?= h($location) ?></span>
-                        <div><b style="width: <?= max(6, ($count / $maxLocation) * 100) ?>%;"></b></div>
-                        <em><?= $count ?></em>
+                    <div class="dashboard-filter simple-filter">
+                        <input id="searchInput" type="search" placeholder="Cari lapangan atau ID..." />
+                        <select id="conditionFilter">
+                            <option value="">Semua Status</option>
+                            <option value="active">Active</option>
+                            <option value="maintenance">Maintenance</option>
+                        </select>
                     </div>
-                <?php endforeach; ?>
-            </div>
-        </article>
-    </section>
+                    <table class="dashboard-table" id="transportTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama</th>
+                                <th>Tipe</th>
+                                <th>Status</th>
+                                <th>Lokasi</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($courts as $row): ?>
+                                <tr
+                                    data-id="<?= (int) $row['id'] ?>"
+                                    data-name="<?= h(strtolower($row['nama_lapangan'] ?? '')) ?>"
+                                    data-type="<?= h(strtolower($row['tipe'] ?? '')) ?>"
+                                    data-condition="<?= h(strtolower($row['status'] ?? '')) ?>"
+                                    data-location="<?= h(strtolower($row['lokasi'] ?? '')) ?>"
+                                >
+                                    <td>#<?= (int) $row['id'] ?></td>
+                                    <td><?= h($row['nama_lapangan'] ?? '-') ?></td>
+                                    <td><?= h($row['tipe'] ?? '-') ?></td>
+                                    <td><span class="status-pill <?= strtolower($row['status'] ?? '') === 'maintenance' ? 'bad' : 'good' ?>"><?= h($row['status'] ?? '-') ?></span></td>
+                                    <td><?= h($row['lokasi'] ?? '-') ?></td>
+                                    <td>
+                                        <?php if ($canManageDashboard): ?>
+                                            <a href="../controllers/TransportController.php?action=edit&id=<?= (int) $row['id'] ?>">Edit</a>
+                                        <?php else: ?>
+                                            <a href="../controllers/BookingController.php?action=create">Booking</a>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </section>
 
-    <section class="dashboard-grid two-columns">
-        <article class="dashboard-card">
-            <div class="section-title">
-                <h2>Pola Booking</h2>
-                <span>Bulanan</span>
-            </div>
-            <div class="line-chart">
-                <?php $index = 0; $totalMonths = max(1, count($monthly) - 1); ?>
-                <?php foreach ($monthly as $month => $count): ?>
-                    <?php
-                    $left = ($index / $totalMonths) * 100;
-                    $bottom = $lineMax > 0 ? ($count / $lineMax) * 78 : 0;
-                    ?>
-                    <span class="line-point" style="left: <?= $left ?>%; bottom: <?= $bottom ?>%;" title="<?= h($month) ?>: <?= $count ?>"></span>
-                    <?php $index++; ?>
-                <?php endforeach; ?>
-            </div>
-            <div class="line-labels">
-                <?php foreach ($monthly as $month => $count): ?>
-                    <span><?= h($month) ?></span>
-                <?php endforeach; ?>
-            </div>
-        </article>
-
-        <article class="dashboard-card">
-            <div class="section-title">
-                <h2>Kebutuhan Tipe</h2>
-                <span>Statistik</span>
-            </div>
-            <div class="type-stats">
-                <?php foreach (array_slice($byType, 0, 5, true) as $type => $count): ?>
-                    <div>
-                        <strong><?= h($type) ?></strong>
-                        <span><?= $count ?> lapangan</span>
-                        <progress value="<?= $count ?>" max="<?= $maxType ?>"></progress>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </article>
-    </section>
-
-            <section class="dashboard-grid three-columns">
-                <article class="dashboard-card wide">
-            <div class="section-title">
-                <h2>Daftar Lapangan</h2>
-                <span id="filteredCount"><?= $totalCourts ?> data</span>
-            </div>
-            <table class="dashboard-table" id="transportTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nama</th>
-                        <th>Tipe</th>
-                        <th>Status</th>
-                        <th>Lokasi</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($courts as $row): ?>
-                        <tr
-                            data-id="<?= (int) $row['id'] ?>"
-                            data-name="<?= h(strtolower($row['nama_lapangan'] ?? '')) ?>"
-                            data-type="<?= h(strtolower($row['tipe'] ?? '')) ?>"
-                            data-condition="<?= h(strtolower($row['status'] ?? '')) ?>"
-                            data-location="<?= h(strtolower($row['lokasi'] ?? '')) ?>"
-                        >
-                            <td>#<?= (int) $row['id'] ?></td>
-                            <td><?= h($row['nama_lapangan'] ?? '-') ?></td>
-                            <td><?= h($row['tipe'] ?? '-') ?></td>
-                            <td><span class="status-pill <?= strtolower($row['status'] ?? '') === 'maintenance' ? 'bad' : 'good' ?>"><?= h($row['status'] ?? '-') ?></span></td>
-                            <td><?= h($row['lokasi'] ?? '-') ?></td>
-                            <td>
-                                <?php if ($canManageDashboard): ?>
-                                    <a href="../controllers/TransportController.php?action=edit&id=<?= (int) $row['id'] ?>">Edit</a>
-                                <?php else: ?>
-                                    <a href="../controllers/BookingController.php?action=create">Booking</a>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </article>
-
-                <article class="dashboard-card">
+                <section class="dashboard-card">
                     <div class="section-title">
                         <h2>Aktivitas Terbaru</h2>
-                        <span><?= count($recentBookings) ?> data</span>
+                        <span><?= count($recentBookings) ?> item</span>
                     </div>
-                    <div class="alert-list">
+                    <div class="alert-list compact">
                         <?php foreach ($recentBookings as $booking): ?>
-                            <a href="../controllers/BookingController.php">
+                            <div class="notification-item">
                                 <strong><?= h($booking['nama_lapangan']) ?></strong>
-                                <span><?= h($booking['username']) ?> - <?= h(date('d M Y', strtotime($booking['tanggal']))) ?>, <?= h(substr($booking['jam_mulai'], 0, 5)) ?></span>
-                            </a>
+                                <span><?= h($booking['username']) ?> — <?= h(date('d M Y', strtotime($booking['tanggal']))) ?>, <?= h(substr($booking['jam_mulai'], 0, 5)) ?></span>
+                            </div>
                         <?php endforeach; ?>
                         <?php if (!$recentBookings): ?>
                             <p>Belum ada reservasi.</p>
                         <?php endif; ?>
                     </div>
-                </article>
-            </section>
+                </section>
+            </main>
+
+            <aside class="dashboard-side">
+                <section class="dashboard-card">
+                    <div class="section-title">
+                        <h2>Upcoming Booking</h2>
+                    </div>
+                    <?php $upcoming = $recentBookings[0] ?? null; ?>
+                    <?php if ($upcoming): ?>
+                        <div class="booking-overview-preview">
+                            <div><strong><?= h($upcoming['nama_lapangan']) ?></strong></div>
+                            <div><?= h($upcoming['username']) ?> — <?= h(date('d M Y', strtotime($upcoming['tanggal']))) ?>, <?= h(substr($upcoming['jam_mulai'], 0, 5)) ?></div>
+                            <?php if (function_exists('bookingReceiptUrl')): ?>
+                                <img src="<?= h(bookingReceiptUrl($upcoming['id'] ?? $upcoming['booking_id'])) ?>" alt="QR" class="booking-qr-preview" />
+                            <?php endif; ?>
+                        </div>
+                    <?php else: ?>
+                        <p>Tidak ada booking mendatang.</p>
+                    <?php endif; ?>
+                </section>
+
+                <section class="dashboard-card">
+                    <div class="section-title">
+                        <h2>Profil Singkat</h2>
+                    </div>
+                    <div class="profile-card simple-profile-card">
+                        <div class="profile-avatar"><?= h(strtoupper(substr($_SESSION["user"], 0, 1))) ?></div>
+                        <div>
+                            <strong><?= h($_SESSION["user"]) ?></strong>
+                            <span><?= h($userRole) ?></span>
+                            <a href="/IkiNet/app/views/logout.php">Logout</a>
+                        </div>
+                    </div>
+                </section>
+            </aside>
         </div>
     </section>
 </div>
